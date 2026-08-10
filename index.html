@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Modern Glassmorphism & Cyber Gradient Theme */
         :root {
             --bg-primary: #0a0e17;
             --bg-secondary: #121824;
@@ -31,14 +30,12 @@
         }
 
         body {
-            /* "জোশ" গ্রেডিয়েন্ট ডার্ক ব্যাকগ্রাউন্ড */
             background: linear-gradient(135deg, #050515 0%, #0a1128 50%, #001f3f 100%);
             color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* Ambient Glow Background Effects */
         .glow-1, .glow-2 {
             position: absolute;
             border-radius: 50%;
@@ -102,10 +99,32 @@
             color: var(--accent-green);
         }
 
+        .auth-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .btn-outline:hover {
+            background: var(--accent-green);
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+        }
+
         .btn-glow {
             background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
             color: #fff;
-            padding: 10px 24px;
+            padding: 8px 20px;
             border: none;
             border-radius: 30px;
             font-weight: 600;
@@ -117,6 +136,57 @@
         .btn-glow:hover {
             transform: translateY(-2px);
             box-shadow: 0 0 25px rgba(0, 255, 204, 0.6);
+        }
+
+        /* Modal (Popup Forms) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: rgba(18, 24, 36, 0.95);
+            border: 1px solid var(--glass-border);
+            padding: 35px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 420px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            position: relative;
+            animation: modalFade 0.3s ease-out;
+        }
+
+        @keyframes modalFade {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .close-btn:hover { color: #ff0055; }
+
+        .modal-title {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            color: var(--accent-green);
+            text-align: center;
         }
 
         /* Hero Section */
@@ -267,7 +337,7 @@
             margin-top: 10px;
         }
 
-        /* Action Form */
+        /* Action Form Elements */
         .action-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -288,6 +358,13 @@
 
         .input-group {
             margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
         }
 
         .input-group input {
@@ -322,23 +399,17 @@
             color: white;
         }
 
-        .btn-deposit:hover {
-            background: #0056c6;
-        }
+        .btn-deposit:hover { background: #0056c6; }
 
         .btn-withdraw {
             background: #ff0055;
             color: white;
         }
 
-        .btn-withdraw:hover {
-            background: #cc0044;
-        }
+        .btn-withdraw:hover { background: #cc0044; }
 
         /* Loan Calculator */
-        .loan-section {
-            padding: 60px 8%;
-        }
+        .loan-section { padding: 60px 8%; }
 
         .loan-box {
             background: var(--glass-bg);
@@ -359,21 +430,13 @@
             display: none;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
                 gap: 15px;
             }
-
-            .hero-text h1 {
-                font-size: 2.2rem;
-            }
-
-            nav ul {
-                gap: 15px;
-                font-size: 0.9rem;
-            }
+            .hero-text h1 { font-size: 2.2rem; }
+            nav ul { gap: 15px; font-size: 0.9rem; }
         }
     </style>
 </head>
@@ -394,8 +457,53 @@
                 <li><a href="#loan">লোন ক্যালকুলেটর</a></li>
             </ul>
         </nav>
-        <button class="btn-glow">লগইন</button>
+        <div class="auth-buttons">
+            <button class="btn-outline" onclick="openModal('signup-modal')">সাইন আপ</button>
+            <button class="btn-glow" onclick="openModal('login-modal')">লগইন</button>
+        </div>
     </header>
+
+    <!-- Sign Up Modal -->
+    <div class="modal" id="signup-modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('signup-modal')">&times;</span>
+            <h3 class="modal-title">নতুন অ্যাকাউন্ট তৈরি করুন</h3>
+            <form id="signup-form">
+                <div class="input-group">
+                    <label>আপনার পূর্ণ নাম</label>
+                    <input type="text" id="signup-name" placeholder="আপনার নাম লিখুন" required>
+                </div>
+                <div class="input-group">
+                    <label>ইমেইল অ্যাড্রেস</label>
+                    <input type="email" id="signup-email" placeholder="example@mail.com" required>
+                </div>
+                <div class="input-group">
+                    <label>পাসওয়ার্ড</label>
+                    <input type="password" id="signup-password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-action btn-deposit">সাইন আপ করুন</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('login-modal')">&times;</span>
+            <h3 class="modal-title">অ্যাকাউন্টে লগইন করুন</h3>
+            <form id="login-form">
+                <div class="input-group">
+                    <label>ইমেইল অ্যাড্রেস</label>
+                    <input type="email" placeholder="example@mail.com" required>
+                </div>
+                <div class="input-group">
+                    <label>পাসওয়ার্ড</label>
+                    <input type="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-action btn-deposit">লগইন</button>
+            </form>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero" id="home">
@@ -414,7 +522,7 @@
                 <div class="card-bottom">
                     <div class="card-holder">
                         Card Holder
-                        <span>SHAREA SOBUJ</span>
+                        <span id="card-holder-name">GUEST USER</span>
                     </div>
                     <div class="card-holder">
                         Expires
@@ -473,15 +581,15 @@
         <h2 class="section-title">স্মার্ট লোন ক্যালকুলেটর</h2>
         <div class="loan-box">
             <div class="input-group">
-                <label style="display:block; margin-bottom:8px;">লোনের পরিমাণ (টাকা)</label>
+                <label>লোনের পরিমাণ (টাকা)</label>
                 <input type="number" id="loan-amount" placeholder="যেমন: 100000">
             </div>
             <div class="input-group">
-                <label style="display:block; margin-bottom:8px;">বার্ষিক সুদের হার (%)</label>
+                <label>বার্ষিক সুদের হার (%)</label>
                 <input type="number" id="loan-rate" placeholder="যেমন: 9">
             </div>
             <div class="input-group">
-                <label style="display:block; margin-bottom:8px;">সময় (বছর)</label>
+                <label>সময় (বছর)</label>
                 <input type="number" id="loan-years" placeholder="যেমন: 2">
             </div>
             <button class="btn-glow" style="width: 100%;" id="btn-calc-loan">হিসাব করুন</button>
@@ -494,6 +602,34 @@
 
     <!-- JavaScript Logic -->
     <script>
+        // Modal Control Functions
+        function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        // Sign Up Handle Logic
+        document.getElementById('signup-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value;
+            
+            // Set account holder name dynamically
+            document.getElementById('card-holder-name').innerText = name.toUpperCase();
+            
+            alert('অভিনন্দন ' + name + '! আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।');
+            closeModal('signup-modal');
+        });
+
+        // Login Handle Logic
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('লগইন সফল হয়েছে!');
+            closeModal('login-modal');
+        });
+
         // Helper function for safe parsing
         function getInputValue(id) {
             const inputField = document.getElementById(id);
@@ -503,72 +639,4 @@
         }
 
         function getTextValue(id) {
-            return parseFloat(document.getElementById(id).innerText);
-        }
-
-        // 1. Deposit Logic
-        document.getElementById('btn-deposit-submit').addEventListener('click', function() {
-            const depositAmount = getInputValue('deposit-input');
-            
-            if (depositAmount <= 0) {
-                alert("অনুগ্রহ করে সঠিক টাকার পরিমাণ লিখুন!");
-                return;
-            }
-
-            const currentDeposit = getTextValue('total-deposit');
-            const newTotalDeposit = currentDeposit + depositAmount;
-            document.getElementById('total-deposit').innerText = newTotalDeposit;
-
-            const currentBalance = getTextValue('current-balance');
-            const newBalance = currentBalance + depositAmount;
-            document.getElementById('current-balance').innerText = newBalance;
-        });
-
-        // 2. Withdraw Logic
-        document.getElementById('btn-withdraw-submit').addEventListener('click', function() {
-            const withdrawAmount = getInputValue('withdraw-input');
-            const currentBalance = getTextValue('current-balance');
-
-            if (withdrawAmount <= 0) {
-                alert("অনুগ্রহ করে সঠিক টাকার পরিমাণ লিখুন!");
-                return;
-            }
-
-            if (withdrawAmount > currentBalance) {
-                alert("আপনার অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই!");
-                return;
-            }
-
-            const currentWithdraw = getTextValue('total-withdraw');
-            const newTotalWithdraw = currentWithdraw + withdrawAmount;
-            document.getElementById('total-withdraw').innerText = newTotalWithdraw;
-
-            const newBalance = currentBalance - withdrawAmount;
-            document.getElementById('current-balance').innerText = newBalance;
-        });
-
-        // 3. Loan EMI Calculator Logic
-        document.getElementById('btn-calc-loan').addEventListener('click', function() {
-            const principal = parseFloat(document.getElementById('loan-amount').value);
-            const calculatedInterest = parseFloat(document.getElementById('loan-rate').value) / 100 / 12;
-            const calculatedPayments = parseFloat(document.getElementById('loan-years').value) * 12;
-
-            if (isNaN(principal) || isNaN(calculatedInterest) || isNaN(calculatedPayments)) {
-                alert("অনুগ্রহ করে লোনের সব তথ্য সঠিকভাবে পূরণ করুন!");
-                return;
-            }
-
-            // Compute monthly payment
-            const x = Math.pow(1 + calculatedInterest, calculatedPayments);
-            const monthly = (principal * x * calculatedInterest) / (x - 1);
-
-            if (isFinite(monthly)) {
-                document.getElementById('monthly-payment').innerText = monthly.toFixed(2);
-                document.getElementById('loan-result').style.display = 'block';
-            } else {
-                alert("হিসাব ভুল হয়েছে, ইনপুট চেক করুন।");
-            }
-        });
-    </script>
-</body>
-  </html>
+            return parseFloat(document.get
