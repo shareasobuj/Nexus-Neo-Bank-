@@ -184,7 +184,6 @@ if (calcLoanBtn) {
       return;
     }
 
-    // Formula: [P x R x (1+R)^N]/[(1+R)^N-1]
     const monthlyRate = (annualRate / 100) / 12;
     const emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
     const totalPayment = emi * months;
@@ -254,4 +253,4 @@ function saveUsers() {
 
 function saveCurrentUser() {
   localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(currentUser));
-    }
+                             }
