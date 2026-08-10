@@ -1,642 +1,170 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus NeoBank | Smart Digital Banking</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;600;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        :root {
-            --bg-primary: #0a0e17;
-            --bg-secondary: #121824;
-            --accent-green: #00ffcc;
-            --accent-blue: #0072ff;
-            --accent-purple: #7a00ff;
-            --text-main: #f0f4f8;
-            --text-muted: #94a3b8;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', 'Hind Siliguri', sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #050515 0%, #0a1128 50%, #001f3f 100%);
-            color: var(--text-main);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .glow-1, .glow-2 {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            z-index: -1;
-        }
-        .glow-1 {
-            width: 400px;
-            height: 400px;
-            background: rgba(0, 255, 204, 0.15);
-            top: -100px;
-            left: -100px;
-        }
-        .glow-2 {
-            width: 500px;
-            height: 500px;
-            background: rgba(122, 0, 255, 0.2);
-            bottom: 0;
-            right: -100px;
-        }
-
-        /* Navigation Bar */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 8%;
-            background: rgba(10, 14, 23, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--glass-border);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(45deg, var(--accent-green), var(--accent-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 30px;
-        }
-
-        nav a {
-            color: var(--text-main);
-            text-decoration: none;
-            font-weight: 500;
-            transition: 0.3s;
-        }
-
-        nav a:hover {
-            color: var(--accent-green);
-        }
-
-        .auth-buttons {
-            display: flex;
-            gap: 12px;
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--accent-green);
-            border: 1px solid var(--accent-green);
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s ease;
-        }
-
-        .btn-outline:hover {
-            background: var(--accent-green);
-            color: #000;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
-        }
-
-        .btn-glow {
-            background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
-            color: #fff;
-            padding: 8px 20px;
-            border: none;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(0, 114, 255, 0.4);
-            transition: 0.3s ease;
-        }
-
-        .btn-glow:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 25px rgba(0, 255, 204, 0.6);
-        }
-
-        /* Modal (Popup Forms) */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: rgba(18, 24, 36, 0.95);
-            border: 1px solid var(--glass-border);
-            padding: 35px;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 420px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            position: relative;
-            animation: modalFade 0.3s ease-out;
-        }
-
-        @keyframes modalFade {
-            from { transform: translateY(-30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 1.5rem;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .close-btn:hover { color: #ff0055; }
-
-        .modal-title {
-            font-size: 1.6rem;
-            margin-bottom: 20px;
-            color: var(--accent-green);
-            text-align: center;
-        }
-
-        /* Hero Section */
-        .hero {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 80px 8%;
-            gap: 50px;
-            flex-wrap: wrap;
-        }
-
-        .hero-text {
-            flex: 1;
-            min-width: 300px;
-        }
-
-        .hero-text h1 {
-            font-size: 3.2rem;
-            line-height: 1.2;
-            margin-bottom: 20px;
-            background: linear-gradient(180deg, #ffffff 0%, #a5b4fc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-text p {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-
-        /* Virtual Bank Card */
-        .card-container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            min-width: 320px;
-        }
-
-        .bank-card {
-            width: 360px;
-            height: 220px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.4s;
-        }
-
-        .bank-card:hover {
-            transform: rotateY(10deg) rotateX(5deg) translateY(-10px);
-        }
-
-        .card-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .chip {
-            width: 45px;
-            height: 35px;
-            background: linear-gradient(135deg, #ffd700, #b8860b);
-            border-radius: 6px;
-        }
-
-        .card-number {
-            font-size: 1.3rem;
-            letter-spacing: 3px;
-            font-family: monospace;
-        }
-
-        .card-bottom {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .card-holder {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            color: var(--text-muted);
-        }
-
-        .card-holder span {
-            display: block;
-            color: #fff;
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
-        /* Dynamic Dashboard Section */
-        .dashboard {
-            padding: 60px 8%;
-            background: rgba(18, 24, 36, 0.6);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid var(--glass-border);
-            border-bottom: 1px solid var(--glass-border);
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 40px;
-            color: var(--accent-green);
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-
-        .stat-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            padding: 25px;
-            border-radius: 16px;
-            text-align: center;
-        }
-
-        .stat-card i {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-        }
-
-        .stat-card.balance i { color: var(--accent-green); }
-        .stat-card.deposit i { color: var(--accent-blue); }
-        .stat-card.withdraw i { color: #ff0055; }
-
-        .stat-card h3 {
-            font-size: 1rem;
-            color: var(--text-muted);
-        }
-
-        .stat-card .amount {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-top: 10px;
-        }
-
-        /* Action Form Elements */
-        .action-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .action-box {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            padding: 30px;
-            border-radius: 16px;
-        }
-
-        .action-box h3 {
-            margin-bottom: 20px;
-            font-size: 1.3rem;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 14px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            color: #fff;
-            font-size: 1rem;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        .input-group input:focus {
-            border-color: var(--accent-green);
-        }
-
-        .btn-action {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn-deposit {
-            background: var(--accent-blue);
-            color: white;
-        }
-
-        .btn-deposit:hover { background: #0056c6; }
-
-        .btn-withdraw {
-            background: #ff0055;
-            color: white;
-        }
-
-        .btn-withdraw:hover { background: #cc0044; }
-
-        /* Loan Calculator */
-        .loan-section { padding: 60px 8%; }
-
-        .loan-box {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            padding: 40px;
-            border-radius: 20px;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .result-box {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(0, 255, 204, 0.1);
-            border: 1px solid var(--accent-green);
-            border-radius: 8px;
-            text-align: center;
-            display: none;
-        }
-
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                gap: 15px;
-            }
-            .hero-text h1 { font-size: 2.2rem; }
-            nav ul { gap: 15px; font-size: 0.9rem; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Neo Bank</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 
-    <div class="glow-1"></div>
-    <div class="glow-2"></div>
+  <!-- Animated Background Glow -->
+  <div class="bg-glow glow-1"></div>
+  <div class="bg-glow glow-2"></div>
 
-    <!-- Header / Navbar -->
-    <header>
-        <div class="logo">
-            <i class="fa-solid fa-vault"></i> NEXUS BANK
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#home">হোম</a></li>
-                <li><a href="#dashboard">অ্যাকাউন্ট</a></li>
-                <li><a href="#loan">লোন ক্যালকুলেটর</a></li>
-            </ul>
-        </nav>
-        <div class="auth-buttons">
-            <button class="btn-outline" onclick="openModal('signup-modal')">সাইন আপ</button>
-            <button class="btn-glow" onclick="openModal('login-modal')">লগইন</button>
-        </div>
-    </header>
-
-    <!-- Sign Up Modal -->
-    <div class="modal" id="signup-modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('signup-modal')">&times;</span>
-            <h3 class="modal-title">নতুন অ্যাকাউন্ট তৈরি করুন</h3>
-            <form id="signup-form">
-                <div class="input-group">
-                    <label>আপনার পূর্ণ নাম</label>
-                    <input type="text" id="signup-name" placeholder="আপনার নাম লিখুন" required>
-                </div>
-                <div class="input-group">
-                    <label>ইমেইল অ্যাড্রেস</label>
-                    <input type="email" id="signup-email" placeholder="example@mail.com" required>
-                </div>
-                <div class="input-group">
-                    <label>পাসওয়ার্ড</label>
-                    <input type="password" id="signup-password" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="btn-action btn-deposit">সাইন আপ করুন</button>
-            </form>
-        </div>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">
+      <i class="fa-solid fa-building-columns"></i> Nexus <span>Neo Bank</span>
     </div>
-
-    <!-- Login Modal -->
-    <div class="modal" id="login-modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('login-modal')">&times;</span>
-            <h3 class="modal-title">অ্যাকাউন্টে লগইন করুন</h3>
-            <form id="login-form">
-                <div class="input-group">
-                    <label>ইমেইল অ্যাড্রেস</label>
-                    <input type="email" placeholder="example@mail.com" required>
-                </div>
-                <div class="input-group">
-                    <label>পাসওয়ার্ড</label>
-                    <input type="password" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="btn-action btn-deposit">লগইন</button>
-            </form>
-        </div>
+    <div id="user-info-nav" class="user-info-nav hidden">
+      <span id="nav-user-name"></span>
+      <button id="logout-btn" class="btn-secondary"><i class="fa-solid fa-right-from-bracket"></i> লগআউট</button>
     </div>
+  </nav>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-text">
-            <h1>স্মার্ট ও আধুনিক ব্যাংকিং সেবার নতুন দিগন্ত</h1>
-            <p>আপনার লেনদেনকে আরও সহজ, দ্রুত ও নিরাপদ করতে আমরা এনেছি ডিজিটাল সমাধান। কোনো ঝামেলা ছাড়াই পরিচালনা করুন আপনার অ্যাকাউন্ট।</p>
-            <button class="btn-glow" onclick="document.getElementById('dashboard').scrollIntoView();">শুরু করুন</button>
-        </div>
-        <div class="card-container">
-            <div class="bank-card">
-                <div class="card-top">
-                    <div class="chip"></div>
-                    <i class="fa-brands fa-cc-visa" style="font-size: 2rem; color: #fff;"></i>
-                </div>
-                <div class="card-number">4532 •••• •••• 8892</div>
-                <div class="card-bottom">
-                    <div class="card-holder">
-                        Card Holder
-                        <span id="card-holder-name">GUEST USER</span>
-                    </div>
-                    <div class="card-holder">
-                        Expires
-                        <span>12/28</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <main class="container">
+    
+    <!-- Auth Section (Login / Signup) -->
+    <section id="auth-section" class="auth-card">
+      
+      <!-- Login Form -->
+      <div id="login-box" class="form-box">
+        <h2>স্বাগতম! <span>লগইন করুন</span></h2>
+        <form id="login-form">
+          <div class="input-group">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="login-email" placeholder="ইমেইল অ্যাড্রেস" required>
+          </div>
+          <div class="input-group">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="login-password" placeholder="পাসওয়ার্ড" required>
+          </div>
+          <button type="submit" class="btn-primary">লগইন করুন</button>
+        </form>
+        <p class="toggle-text">একাউন্ট নেই? <a href="#" id="show-signup">নতুন একাউন্ট খুলুন</a></p>
+      </div>
+
+      <!-- Signup Form -->
+      <div id="signup-box" class="form-box hidden">
+        <h2>নতুন <span>একাউন্ট তৈরি করুন</span></h2>
+        <form id="signup-form">
+          <div class="input-group">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" id="signup-name" placeholder="আপনার নাম" required>
+          </div>
+          <div class="input-group">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="signup-email" placeholder="ইমেইল অ্যাড্রেস" required>
+          </div>
+          <div class="input-group">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="signup-password" placeholder="পাসওয়ার্ড" required>
+          </div>
+          <div class="input-group">
+            <i class="fa-solid fa-wallet"></i>
+            <input type="number" id="signup-balance" placeholder="প্রাথমিক জমা (টাকা)" min="500" required>
+          </div>
+          <button type="submit" class="btn-primary">সাইন আপ করুন</button>
+        </form>
+        <p class="toggle-text">ইতিমধ্যে একাউন্ট আছে? <a href="#" id="show-login">লগইন করুন</a></p>
+      </div>
+
     </section>
 
-    <!-- Dynamic Dashboard -->
-    <section class="dashboard" id="dashboard">
-        <h2 class="section-title">ডাইনামিক ব্যাংকিং ড্যাশবোর্ড</h2>
-        
-        <div class="dashboard-grid">
-            <div class="stat-card balance">
-                <i class="fa-solid fa-wallet"></i>
-                <h3>মোট ব্যালেন্স</h3>
-                <div class="amount">৳ <span id="current-balance">12000</span></div>
-            </div>
-            <div class="stat-card deposit">
-                <i class="fa-solid fa-circle-arrow-down"></i>
-                <h3>মোট জমা (Deposit)</h3>
-                <div class="amount">৳ <span id="total-deposit">00</span></div>
-            </div>
-            <div class="stat-card withdraw">
-                <i class="fa-solid fa-circle-arrow-up"></i>
-                <h3>মোট উত্তোলন (Withdraw)</h3>
-                <div class="amount">৳ <span id="total-withdraw">00</span></div>
-            </div>
+    <!-- Dashboard Section (Logged In) -->
+    <section id="dashboard-section" class="dashboard hidden">
+      <div class="welcome-banner">
+        <h1>হ্যালো, <span id="dash-user-name">ব্যবহারকারী</span>! 👋</h1>
+        <p>Nexus Neo Bank-এ আপনার অর্থ নিরাপদ ও আধুনিক প্রযুক্তি দিয়ে পরিচালিত।</p>
+      </div>
+
+      <!-- Balance Overview Cards -->
+      <div class="cards-grid">
+        <div class="card balance-card">
+          <i class="fa-solid fa-wallet card-icon"></i>
+          <h3>মোট ব্যালেন্স</h3>
+          <p class="amount">৳ <span id="total-balance">0.00</span></p>
+        </div>
+        <div class="card deposit-card-stat">
+          <i class="fa-solid fa-money-bill-trend-up card-icon"></i>
+          <h3>মোট জমা</h3>
+          <p class="amount">৳ <span id="total-deposit">0.00</span></p>
+        </div>
+        <div class="card withdraw-card-stat">
+          <i class="fa-solid fa-hand-holding-dollar card-icon"></i>
+          <h3>মোট উত্তোলন</h3>
+          <p class="amount">৳ <span id="total-withdraw">0.00</span></p>
+        </div>
+      </div>
+
+      <!-- Quick Actions Grid -->
+      <div class="actions-grid">
+        <!-- Deposit Box -->
+        <div class="action-box">
+          <h3><i class="fa-solid fa-circle-arrow-down"></i> টাকা জমা করুন</h3>
+          <input type="number" id="deposit-amount" placeholder="পরিমাণ লিখুন">
+          <button id="deposit-btn" class="btn-action btn-deposit">জমা দিন</button>
         </div>
 
-        <div class="action-container">
-            <!-- Deposit Form -->
-            <div class="action-box">
-                <h3>টাকা জমা করুন (Deposit)</h3>
-                <div class="input-group">
-                    <input type="number" id="deposit-input" placeholder="পরিমাণ লিখুন (টাকা)">
-                </div>
-                <button class="btn-action btn-deposit" id="btn-deposit-submit">জমা দিন</button>
-            </div>
-
-            <!-- Withdraw Form -->
-            <div class="action-box">
-                <h3>টাকা উত্তোলন করুন (Withdraw)</h3>
-                <div class="input-group">
-                    <input type="number" id="withdraw-input" placeholder="পরিমাণ লিখুন (টাকা)">
-                </div>
-                <button class="btn-action btn-withdraw" id="btn-withdraw-submit">উত্তোলনের আবেদন</button>
-            </div>
+        <!-- Withdraw Box -->
+        <div class="action-box">
+          <h3><i class="fa-solid fa-circle-arrow-up"></i> টাকা উত্তোলন করুন</h3>
+          <input type="number" id="withdraw-amount" placeholder="পরিমাণ লিখুন">
+          <button id="withdraw-btn" class="btn-action btn-withdraw">উত্তোলন করুন</button>
         </div>
+      </div>
+
+      <!-- Loan Calculator Section -->
+      <div class="loan-calculator-box">
+        <h3><i class="fa-solid fa-calculator"></i> লোন ক্যালকুলেটর (EMI Calculator)</h3>
+        <div class="calculator-grid">
+          <div class="calc-inputs">
+            <div class="input-field">
+              <label>লোনের পরিমাণ (টাকা):</label>
+              <input type="number" id="loan-amount" placeholder="যেমন: 100000">
+            </div>
+            <div class="input-field">
+              <label>বার্ষিক সুদের হার (%):</label>
+              <input type="number" id="loan-rate" placeholder="যেমন: 9" step="0.1">
+            </div>
+            <div class="input-field">
+              <label>পরিশোধের সময় (মাস):</label>
+              <input type="number" id="loan-months" placeholder="যেমন: 12">
+            </div>
+            <button id="calc-loan-btn" class="btn-primary">হিসাব করুন</button>
+          </div>
+
+          <div class="calc-results">
+            <div class="result-card">
+              <span>মাসিক কিস্তি (EMI)</span>
+              <h4>৳ <span id="emi-result">0.00</span></h4>
+            </div>
+            <div class="result-card">
+              <span>মোট সুদ</span>
+              <h4>৳ <span id="total-interest-result">0.00</span></h4>
+            </div>
+            <div class="result-card">
+              <span>মোট পরিশোধ যোগ্য</span>
+              <h4>৳ <span id="total-payment-result">0.00</span></h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transaction History -->
+      <div class="history-box">
+        <h3><i class="fa-solid fa-list-check"></i> লেনদেন বিবরণী</h3>
+        <ul id="transaction-list" class="transaction-list">
+          <!-- Dynamically populated -->
+        </ul>
+      </div>
+
     </section>
 
-    <!-- Loan Calculator Section -->
-    <section class="loan-section" id="loan">
-        <h2 class="section-title">স্মার্ট লোন ক্যালকুলেটর</h2>
-        <div class="loan-box">
-            <div class="input-group">
-                <label>লোনের পরিমাণ (টাকা)</label>
-                <input type="number" id="loan-amount" placeholder="যেমন: 100000">
-            </div>
-            <div class="input-group">
-                <label>বার্ষিক সুদের হার (%)</label>
-                <input type="number" id="loan-rate" placeholder="যেমন: 9">
-            </div>
-            <div class="input-group">
-                <label>সময় (বছর)</label>
-                <input type="number" id="loan-years" placeholder="যেমন: 2">
-            </div>
-            <button class="btn-glow" style="width: 100%;" id="btn-calc-loan">হিসাব করুন</button>
+  </main>
 
-            <div class="result-box" id="loan-result">
-                <h4>প্রতি মাসে পরিশোধ করতে হবে: <span id="monthly-payment" style="color:var(--accent-green); font-size:1.4rem;">0</span> টাকা</h4>
-            </div>
-        </div>
-    </section>
-
-    <!-- JavaScript Logic -->
-    <script>
-        // Modal Control Functions
-        function openModal(id) {
-            document.getElementById(id).style.display = 'flex';
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).style.display = 'none';
-        }
-
-        // Sign Up Handle Logic
-        document.getElementById('signup-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const name = document.getElementById('signup-name').value;
-            
-            // Set account holder name dynamically
-            document.getElementById('card-holder-name').innerText = name.toUpperCase();
-            
-            alert('অভিনন্দন ' + name + '! আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।');
-            closeModal('signup-modal');
-        });
-
-        // Login Handle Logic
-        document.getElementById('login-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('লগইন সফল হয়েছে!');
-            closeModal('login-modal');
-        });
-
-        // Helper function for safe parsing
-        function getInputValue(id) {
-            const inputField = document.getElementById(id);
-            const value = parseFloat(inputField.value);
-            inputField.value = '';
-            return isNaN(value) ? 0 : value;
-        }
-
-        function getTextValue(id) {
-            return parseFloat(document.get
+  <script src="script.js"></script>
+</body>
+              </html>
